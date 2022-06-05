@@ -38,7 +38,7 @@ def profile(request,username):
       prof_form = UpdateUserProfileForm(instance=request.user.profile)
       params = {
         'user_form': user_form,
-        'pprof_form': prof_form,
+        'prof_form': prof_form,
         'images': images,
       }
       return render(request,'gram/profile.html', params)
