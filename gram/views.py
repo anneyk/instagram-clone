@@ -178,3 +178,35 @@ def like_post(request):
     if request.is_ajax():
         html = render_to_string('like_section.html', params, request=request)
         return JsonResponse({'form': html})
+
+@login_required(login_url='login')
+def search_profile(request):
+    if 'search_user' in request.GET and request.GET['search_user']:
+        name = request.GET.get("search_user")
+        results = Profile.search_profile(name)
+        print(results)
+        message = f'name'
+        params = {
+            'results': results,
+            'message': message
+        }
+        return render(request, 'results.html', params)
+    else:
+        message = "You haven't searched for any image category"
+    return render(request, 'results.html', {'message': message})
+
+
+def unfollow(request, to_unfollow):
+    if request.method == 'GET':
+        user_profile2 = Profile.objects.get(pk=to_unfollow)
+        unfollow_d = Follow.objects.filter(follower=request.user.profile, followed=user_profile2)
+        unfollow_d.delete()
+        return redirect('user_profile', user_profile2.user.username)
+
+
+def follow(request, to_follow):
+    if request.method == 'GET':
+        user_profile3 = Profile.objects.get(pk=to_follow)
+        follow_s = Follow(follower=request.user.profile, followed=user_profile3)
+        follow_s.save()
+        return redirect('user_profile', user_profile3.user.username)
