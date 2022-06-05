@@ -2,12 +2,13 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render,redirect
 
 from gram.models import Follow, Post
-from .forms import PostForm, SignUpForm, UserRegistrationForm
+from .forms import CommentForm, PostForm, SignUpForm, UserRegistrationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import UpdateUserForm,UpdateUserProfileForm
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
+from django.views.generic import RedirectView
 # Create your views here.
 
 def register(request):
@@ -88,3 +89,41 @@ def user_profile(request, username):
     }
     print(followers)
     return render(request, 'user_profile.html', params)
+
+@login_required(login_url='login')
+def post_comment(request, id):
+    image = get_object_or_404(Post, pk=id)
+    is_liked = False
+    if image.likes.filter(id=request.user.id).exists():
+        is_liked = True
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            savecomment = form.save(commit=False)
+            savecomment.post = image
+            savecomment.user = request.user.profile
+            savecomment.save()
+            return HttpResponseRedirect(request.path_info)
+    else:
+        form = CommentForm()
+    params = {
+        'image': image,
+        'form': form,
+        'is_liked': is_liked,
+        'total_likes': image.total_likes()
+    }
+    return render(request, 'single_post.html', params)
+
+
+class PostLikeToggle(RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        id = self.kwargs.get('id')
+        print(id)
+        obj = get_object_or_404(Post, pk=id)
+        url_ = obj.get_absolute_url()
+        user = self.request.user
+        if user in obj.likes.all():
+            obj.likes.remove(user)
+        else:
+            obj.likes.add(user)
+        return url_
