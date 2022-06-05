@@ -35,4 +35,7 @@ class CommentForm(forms.ModelForm):
     self.fields['comment'].widget = forms.TextInput()
     self.fields['comment'].widget.attrs['placeholder'] = 'Add a comment...'
 
+  class Meta:
+    model = Comment
+    fields = ('comment',)
 
