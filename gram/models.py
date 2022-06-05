@@ -9,9 +9,9 @@ class NewUser(models.Model):
     password1 = models.CharField(max_length=30, blank=True)
     password2 = models.CharField(max_length=30)
 
-class UserProfile(models.Model):
+class Profile(models.Model):
   user = models.OneToOneField(User, on_delete=models.CASCADE) 
-  profile_pic = models.ImageField(upload_to='images/',default='default.png')
+  profile_picture = models.ImageField(upload_to='images/',default='default.png')
   bio = models.TextField(max_length=300, default='My bio',blank=True)
   name = models.CharField(max_length=30, blank=True)
 
