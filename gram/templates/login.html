@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CSS only -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <title>Document</title>
+</head>
+<body>
+<!--Login--> 
+<div class="container py-5 ">
+  <h1>Login</h1>
+  <hr>
+  <form method="POST">
+    {% csrf_token %}
+    {% for field in form %}
+        <p>{{ field.label }}: <br> {{ field }}</p>
+    {% endfor %}
+    <button class="btn btn-primary" type="submit">Login</button>
+  </form>
+  <br/>
+  <p class="text-center">Don't have an account? <a href="/register">Create an account</a>.</p>
+</div>
+</body>
+</html>
+
