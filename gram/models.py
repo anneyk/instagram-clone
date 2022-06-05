@@ -4,12 +4,6 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 # Create your models here.
 class NewUser(models.Model):
-    OUR_CHOICES =(
-    ("Mgr", "Manager"),
-    ("Emp", "Employee"),
-    ("Admin", "Administrator"),
-    ("Sup", "Supervisor"),
-    )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     email = models.EmailField()
     password1 = models.CharField(max_length=30, blank=True)
