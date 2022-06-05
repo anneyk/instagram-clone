@@ -1,36 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- CSS only -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <title>Document</title>
-</head>
-<body>
-    <div class="container py-5">
-        <div>
-        <h1>Register</h1>
-        <hr>
-        <form method="POST" enctype="multipart/form-data">
-
-            {% csrf_token %}
-
-            {% for field in form %}
-            <div>
-                <p>{{ field.label }}: <br> {{ field }}</p>
-
-            {% for error in field.errors %}
-                <small style="color": red;>{{ error }}</small>
-                {% endfor %}
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% load static %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-title mt-4">
+                    <img src="{% static 'images/insta5.png' %}" alt="" width="40%" class="D-block mx-auto">
+                </div>
+                <div class="card-body mb-3 mr-3 ml-3">
+                    <p class="text-center">Sign up to see photos and videos from your friends.
+                    </p>
+                    <form action="" method="post" novalidate>
+                        {% csrf_token%}
+                        {{ form|crispy}}
+                        <button type="submit" class="btn btn-primary btn-sm"> Sign up</button>
+                    </form>
+                </div>
+                <p class="mr-4 ml-4 mb-2 text-center">By signing up, you agree to our Terms , Data Policy and Cookies
+                    Policy.</p>
             </div>
-            {% endfor %}
-                   
-            <button class="btn btn-primary" type="submit">Register</button>
-        </form>
-        <p class="text-center">If you already have an account, <a href="/login">login</a> instead.</p>
+            <div class="card mt-2">
+                <div class="card-body mt-3 mb-2 mr-3 ml-3">
+                    <p>Have an account? <a href="{% url 'login' %}">Log in</a></p>
+                </div>
+            </div>
+            <div container>
+                <p class="text-center mt-4">Get the app</p>
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-5 mb-2">
+                        <img src="{% static 'images/insta2.png' %}" alt="" width="100%" class="download">
+                    </div>
+                    <div class="col-md-5 mb-2">
+                        <img src="{% static 'images/insta1.png' %}" alt="" width="100%" class="download">
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4"></div>
     </div>
-    
-</body>
-</html>
+</div>
+
+{% endblock %}
