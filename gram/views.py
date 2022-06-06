@@ -1,33 +1,31 @@
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect, JsonResponse
-from django.shortcuts import get_object_or_404, render,redirect
-
-from .models import Follow, Post, Profile, Follow, Comment
-from .forms import CommentForm, PostForm, SignUpForm, UpdateUserForm,UpdateUserProfileForm
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import UpdateUserForm,UpdateUserProfileForm
+from .forms import SignUpForm, UpdateUserForm, UpdateUserProfileForm, PostForm, CommentForm
 from django.contrib.auth import login, authenticate
+from .models import Post, Comment, Profile, Follow
 from django.contrib.auth.models import User
-from django.views.generic import RedirectView
 from django.template.loader import render_to_string
+from django.views.generic import RedirectView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
-# Create your views here.
 
-def register(request):
-  if request.method == 'POST':
-    form = SignUpForm(request.POST)
-    if form.is_valid():
-      form.save()
-      username = form.cleaned_data.get('username')
-      raw_password = form.cleaned_data.get('password1')
-      user = authenticate(username=username, password=raw_password)
-      login(request, user)
-      return redirect('index')
+
+def signup(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect('index')
     else:
-      form = SignUpForm()
-    return render(request, 'register.html', {'form': form})
+        form = SignUpForm()
+    return render(request, 'registration/signup.html', {'form': form})
+
 
 @login_required(login_url='login')
 def index(request):
@@ -48,7 +46,8 @@ def index(request):
         'users': users,
 
     }
-    return render(request, 'index.html', params)
+    return render(request, 'instagram/index.html', params)
+
 
 @login_required(login_url='login')
 def profile(request, username):
@@ -69,7 +68,8 @@ def profile(request, username):
         'images': images,
 
     }
-    return render(request, 'profile.html', params)
+    return render(request, 'instagram/profile.html', params)
+
 
 @login_required(login_url='login')
 def user_profile(request, username):
@@ -92,7 +92,8 @@ def user_profile(request, username):
         'follow_status': follow_status
     }
     print(followers)
-    return render(request, 'user_profile.html', params)
+    return render(request, 'instagram/user_profile.html', params)
+
 
 @login_required(login_url='login')
 def post_comment(request, id):
@@ -116,7 +117,7 @@ def post_comment(request, id):
         'is_liked': is_liked,
         'total_likes': image.total_likes()
     }
-    return render(request, 'single_post.html', params)
+    return render(request, 'instagram/single_post.html', params)
 
 
 class PostLikeToggle(RedirectView):
@@ -131,6 +132,7 @@ class PostLikeToggle(RedirectView):
         else:
             obj.likes.add(user)
         return url_
+
 
 class PostLikeAPIToggle(APIView):
     authentication_classes = [authentication.SessionAuthentication]
@@ -176,8 +178,9 @@ def like_post(request):
         'total_likes': image.total_likes()
     }
     if request.is_ajax():
-        html = render_to_string('like_section.html', params, request=request)
+        html = render_to_string('instagram/like_section.html', params, request=request)
         return JsonResponse({'form': html})
+
 
 @login_required(login_url='login')
 def search_profile(request):
@@ -190,10 +193,10 @@ def search_profile(request):
             'results': results,
             'message': message
         }
-        return render(request, 'results.html', params)
+        return render(request, 'instagram/results.html', params)
     else:
         message = "You haven't searched for any image category"
-    return render(request, 'results.html', {'message': message})
+    return render(request, 'instagram/results.html', {'message': message})
 
 
 def unfollow(request, to_unfollow):
