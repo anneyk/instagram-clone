@@ -6,7 +6,7 @@
 This is an  Instagram clone where people share their  images and videos for other users to view, like and comment.
 Users can sign up, login, view and post photos, search and follow other users.
 ##  Live Link  
- Click lagram.herokuapp.com/  to visit the site
+ Click https://lagram.herokuapp.com/ visit the site
  
 ## User Story  
   
@@ -15,8 +15,6 @@ Users can sign up, login, view and post photos, search and follow other users.
 * Search for different users using their usernames.  
 * See your profile with all your pictures.  
 * Follow other users and see their pictures on their timeline.  
-  
-
   
 ## Setup and Installation   
   
