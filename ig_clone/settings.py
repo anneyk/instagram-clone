@@ -24,11 +24,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
-DEBUG = config('DEBUG', default=False, cast=bool)
+# DEBUG = config('DEBUG', default=False, cast=bool)
 
 # ALLOWED_HOSTS = ['127.0.0.1']
 
@@ -100,7 +100,9 @@ WSGI_APPLICATION = 'ig_clone.wsgi.application'
 #     'PASSWORD':'anney',
 #     }
 # }
-
+SECRET_KEY = config('SECRET_KEY')
+MODE=config("MODE", default="dev")
+DEBUG = os.environ.get('DEBUG', False)
 
 if config('MODE')=="dev":
    DATABASES = {
