@@ -1,4 +1,5 @@
-# instagram-clone
+# Instagram-clone
+
 # Author
   Annet Khavere  
   
